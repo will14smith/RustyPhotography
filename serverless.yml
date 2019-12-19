@@ -1,0 +1,17 @@
+service: rusty-photography
+
+plugins:
+  - serverless-rust
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'dev'}
+  region: eu-west-2
+  runtime: rust
+
+package:
+  individually: true
+
+functions:
+  hello:
+    handler: photography.hello

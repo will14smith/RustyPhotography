@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "serverless-rust": "^0.3.7"
+  }
+}
