@@ -15,3 +15,13 @@ package:
 functions:
   hello:
     handler: photography.hello
+
+  web:
+    handler: photography.web
+    events:
+      - http:
+          path: /
+          method: any
+      - http:
+          path: "{proxy+}"
+          method: any
