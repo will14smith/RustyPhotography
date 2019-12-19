@@ -2,6 +2,8 @@
 
 #[macro_use] extern crate rocket;
 
+pub mod data;
+
 use serde::Serialize;
 use rocket::response::status;
 use rocket_contrib::json::Json;
