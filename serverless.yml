@@ -9,6 +9,18 @@ provider:
   region: eu-west-2
   runtime: rust
 
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - "dynamodb:Scan"
+      Resource:
+        Fn::Join:
+          - ':'
+          - - "arn:aws:dynamodb"
+            - Ref: 'AWS::Region'
+            - Ref: 'AWS::AccountId'
+            - "table/photography-prod-photograph"
+
 package:
   individually: true
 
