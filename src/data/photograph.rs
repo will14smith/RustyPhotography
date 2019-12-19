@@ -24,12 +24,12 @@ pub struct Photograph {
 }
 
 impl Photograph {
-    pub fn id(&self) -> Uuid {
-        self.id
-    }
-    pub fn title(&self) -> &String {
-        &self.title
-    }
+    pub fn id(&self) -> Uuid { self.id }
+    pub fn title(&self) -> &String { &self.title }
+    pub fn layout(&self) -> &Option<Layout> { &self.layout }
+    pub fn images(&self) -> &Vec<Image> { &self.images }
+    pub fn capture_time(&self) -> chrono::DateTime<chrono::Utc> { self.capture_time }
+    pub fn upload_time(&self) -> chrono::DateTime<chrono::Utc> { self.upload_time }
 
     pub fn from_document(document: HashMap<String, AttributeValue>) -> Photograph {
         serde_dynamodb::from_hashmap(document).unwrap()

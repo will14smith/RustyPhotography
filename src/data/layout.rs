@@ -8,3 +8,9 @@ pub struct Layout {
     width: Option<u32>,
     height: Option<u32>,
 }
+
+impl Layout {
+    pub fn order(&self) -> i32 { self.order }
+    pub fn width(&self) -> Option<u32> { self.width }
+    pub fn height(&self) -> Option<u32> { self.height }
+}

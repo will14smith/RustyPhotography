@@ -9,7 +9,12 @@ pub struct Image {
     image_type: ImageType,
 }
 
-#[derive(Debug)]
+impl Image {
+    pub fn object_key(&self) -> &String { &self.object_key }
+    pub fn image_type(&self) -> ImageType { self.image_type }
+}
+
+#[derive(Copy, Clone, Debug)]
 pub enum ImageType {
     Full,
     Thumbnail,

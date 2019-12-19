@@ -4,9 +4,14 @@
 
 pub mod data;
 
+mod models;
+mod list_photographs;
+
 use serde::Serialize;
 use rocket::response::status;
 use rocket_contrib::json::Json;
+
+use crate::data::Client;
 
 #[get("/")]
 fn index() -> &'static str {
@@ -25,7 +30,8 @@ fn echo(text: &rocket::http::RawStr) -> Result<Json<EchoResponse>, status::BadRe
     Ok(Json(EchoResponse{ text: decoded_text }))
 }
 
-pub fn create_rocket() -> rocket::Rocket {
+pub fn create_rocket(client: Client) -> rocket::Rocket {
     rocket::ignite()
-        .mount("/", routes![index, echo])
+        .manage(client)
+        .mount("/", routes![index, echo, list_photographs::list_photographs])
 }

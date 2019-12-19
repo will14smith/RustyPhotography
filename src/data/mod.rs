@@ -2,17 +2,19 @@ mod image;
 mod layout;
 mod photograph;
 
+pub use image::{Image, ImageType};
+pub use layout::Layout;
 pub use photograph::Photograph;
 
 use rusoto_core::RusotoError;
-use rusoto_dynamodb::{DynamoDb, ScanInput, ScanError};
+use rusoto_dynamodb::{DynamoDb, ScanInput, ScanError, DynamoDbClient};
 
-pub struct Client<'a> {
-    dynamo: &'a dyn DynamoDb,
+pub struct Client {
+    dynamo: DynamoDbClient,
 }
 
-impl<'a> Client<'a> {
-    pub fn new(dynamo: &dyn DynamoDb) -> Client {
+impl Client {
+    pub fn new(dynamo: DynamoDbClient) -> Client {
         Client {
             dynamo
         }
