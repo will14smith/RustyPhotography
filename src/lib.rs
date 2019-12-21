@@ -5,7 +5,9 @@
 pub mod data;
 
 mod models;
+
 mod list_photographs;
+mod get_photograph;
 
 use serde::Serialize;
 use rocket::response::status;
@@ -33,5 +35,9 @@ fn echo(text: &rocket::http::RawStr) -> Result<Json<EchoResponse>, status::BadRe
 pub fn create_rocket(client: Client) -> rocket::Rocket {
     rocket::ignite()
         .manage(client)
-        .mount("/", routes![index, echo, list_photographs::list_photographs])
+        .mount("/", routes![
+            index, echo,
+            get_photograph::get_photograph,
+            list_photographs::list_photographs,
+        ])
 }

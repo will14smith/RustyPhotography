@@ -12,6 +12,7 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
+        - "dynamodb:GetItem"
         - "dynamodb:Scan"
       Resource:
         Fn::Join:

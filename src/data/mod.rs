@@ -7,21 +7,22 @@ pub use layout::Layout;
 pub use photograph::Photograph;
 
 use rusoto_core::RusotoError;
-use rusoto_dynamodb::{DynamoDb, ScanInput, ScanError, DynamoDbClient};
+use rusoto_dynamodb::DynamoDb;
+use std::collections::HashMap;
 
 pub struct Client {
-    dynamo: DynamoDbClient,
+    dynamo: rusoto_dynamodb::DynamoDbClient,
 }
 
 impl Client {
-    pub fn new(dynamo: DynamoDbClient) -> Client {
+    pub fn new(dynamo: rusoto_dynamodb::DynamoDbClient) -> Client {
         Client {
-            dynamo
+            dynamo,
         }
     }
 
-    pub fn list_photographs(&self) -> Result<Vec<Photograph>, RusotoError<ScanError>> {
-        let mut input = ScanInput::default();
+    pub fn list_photographs(&self) -> Result<Vec<Photograph>, RusotoError<rusoto_dynamodb::ScanError>> {
+        let mut input = rusoto_dynamodb::ScanInput::default();
         input.table_name = String::from("photography-prod-photograph");
 
         let mut result = Vec::new();
@@ -38,5 +39,19 @@ impl Client {
         }
 
         Ok(result)
+    }
+
+    pub fn get_photograph(&self, id: uuid::Uuid) -> Result<Option<Photograph>, RusotoError<rusoto_dynamodb::GetItemError>> {
+        let mut value = rusoto_dynamodb::AttributeValue::default();
+        value.s = Some(format!("{}", id.to_hyphenated()));
+
+        let mut input = rusoto_dynamodb::GetItemInput::default();
+        input.table_name = String::from("photography-prod-photograph");
+        input.key = HashMap::new();
+        input.key.insert(String::from("id"), value);
+
+        let output = self.dynamo.get_item(input).sync()?;
+
+        Ok(output.item.map(Photograph::from_document))
     }
 }
