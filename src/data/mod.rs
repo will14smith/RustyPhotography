@@ -10,20 +10,26 @@ use rusoto_core::RusotoError;
 use rusoto_dynamodb::DynamoDb;
 use std::collections::HashMap;
 
+pub struct Config {
+    pub photograph_table: String,
+}
+
 pub struct Client {
     dynamo: rusoto_dynamodb::DynamoDbClient,
+    config: Config,
 }
 
 impl Client {
-    pub fn new(dynamo: rusoto_dynamodb::DynamoDbClient) -> Client {
+    pub fn new(dynamo: rusoto_dynamodb::DynamoDbClient, config: Config) -> Client {
         Client {
             dynamo,
+            config,
         }
     }
 
     pub fn list_photographs(&self) -> Result<Vec<Photograph>, RusotoError<rusoto_dynamodb::ScanError>> {
         let mut input = rusoto_dynamodb::ScanInput::default();
-        input.table_name = String::from("photography-prod-photograph");
+        input.table_name = self.config.photograph_table.clone();
 
         let mut result = Vec::new();
 
@@ -46,7 +52,7 @@ impl Client {
         value.s = Some(format!("{}", id.to_hyphenated()));
 
         let mut input = rusoto_dynamodb::GetItemInput::default();
-        input.table_name = String::from("photography-prod-photograph");
+        input.table_name = self.config.photograph_table.clone();
         input.key = HashMap::new();
         input.key.insert(String::from("id"), value);
 
