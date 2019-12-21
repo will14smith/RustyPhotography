@@ -12,6 +12,8 @@ mod edit_photograph;
 mod get_photograph;
 mod list_photographs;
 
+mod edit_layout;
+
 use serde::Serialize;
 use rocket::response::status;
 use rocket_contrib::json::Json;
@@ -44,5 +46,7 @@ pub fn create_rocket(client: Client) -> rocket::Rocket {
             edit_photograph::edit_photograph,
             get_photograph::get_photograph,
             list_photographs::list_photographs,
+
+            edit_layout::edit_layout,
         ])
 }
