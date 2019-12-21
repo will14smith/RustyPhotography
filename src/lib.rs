@@ -8,6 +8,7 @@ pub mod data;
 mod models;
 
 mod create_photograph;
+mod edit_photograph;
 mod get_photograph;
 mod list_photographs;
 
@@ -40,6 +41,7 @@ pub fn create_rocket(client: Client) -> rocket::Rocket {
         .mount("/", routes![
             index, echo,
             create_photograph::create_photograph,
+            edit_photograph::edit_photograph,
             get_photograph::get_photograph,
             list_photographs::list_photographs,
         ])

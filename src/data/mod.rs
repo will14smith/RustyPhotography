@@ -7,7 +7,7 @@ pub use layout::Layout;
 pub use photograph::Photograph;
 
 use rusoto_core::RusotoError;
-use rusoto_dynamodb::DynamoDb;
+use rusoto_dynamodb::{DynamoDb, AttributeValueUpdate};
 use std::collections::HashMap;
 
 pub struct Config {
@@ -19,6 +19,17 @@ pub struct Client {
     config: Config,
 }
 
+fn get_photograph_key(id: uuid::Uuid) -> HashMap<String, rusoto_dynamodb::AttributeValue> {
+    let mut key = HashMap::new();
+
+    key.insert(String::from("id"), rusoto_dynamodb::AttributeValue {
+        s: Some(format!("{}", id.to_hyphenated())),
+        ..rusoto_dynamodb::AttributeValue::default()
+    });
+
+    key
+}
+
 impl Client {
     pub fn new(dynamo: rusoto_dynamodb::DynamoDbClient, config: Config) -> Client {
         Client {
@@ -28,8 +39,10 @@ impl Client {
     }
 
     pub fn list_photographs(&self) -> Result<Vec<Photograph>, RusotoError<rusoto_dynamodb::ScanError>> {
-        let mut input = rusoto_dynamodb::ScanInput::default();
-        input.table_name = self.config.photograph_table.clone();
+        let mut input = rusoto_dynamodb::ScanInput {
+            table_name: self.config.photograph_table.clone(),
+            ..rusoto_dynamodb::ScanInput::default()
+        };
 
         let mut result = Vec::new();
 
@@ -48,13 +61,11 @@ impl Client {
     }
 
     pub fn get_photograph(&self, id: uuid::Uuid) -> Result<Option<Photograph>, RusotoError<rusoto_dynamodb::GetItemError>> {
-        let mut value = rusoto_dynamodb::AttributeValue::default();
-        value.s = Some(format!("{}", id.to_hyphenated()));
-
-        let mut input = rusoto_dynamodb::GetItemInput::default();
-        input.table_name = self.config.photograph_table.clone();
-        input.key = HashMap::new();
-        input.key.insert(String::from("id"), value);
+        let input = rusoto_dynamodb::GetItemInput {
+            table_name: self.config.photograph_table.clone(),
+            key: get_photograph_key(id),
+            ..rusoto_dynamodb::GetItemInput::default()
+        };
 
         let output = self.dynamo.get_item(input).sync()?;
 
@@ -62,12 +73,28 @@ impl Client {
     }
 
     pub fn add_photograph(&self, photograph: Photograph) -> Result<Photograph, RusotoError<rusoto_dynamodb::PutItemError>> {
-        let mut input = rusoto_dynamodb::PutItemInput::default();
-        input.table_name = self.config.photograph_table.clone();
-        input.item = photograph.to_document();
+        let input = rusoto_dynamodb::PutItemInput {
+            table_name: self.config.photograph_table.clone(),
+            item: photograph.to_document(),
+            ..rusoto_dynamodb::PutItemInput::default()
+        };
 
         self.dynamo.put_item(input).sync()?;
 
         Ok(photograph)
+    }
+
+    pub fn update_photograph(&self, id: uuid::Uuid, updates: HashMap<String, AttributeValueUpdate>) -> Result<Photograph, RusotoError<rusoto_dynamodb::UpdateItemError>> {
+        let input = rusoto_dynamodb::UpdateItemInput {
+            table_name: self.config.photograph_table.clone(),
+            key: get_photograph_key(id),
+            attribute_updates: Some(updates),
+            return_values: Some(String::from("ALL_NEW")),
+            ..rusoto_dynamodb::UpdateItemInput::default()
+        };
+
+        let output = self.dynamo.update_item(input).sync()?;
+
+        Ok(Photograph::from_document(output.attributes.unwrap()))
     }
 }
