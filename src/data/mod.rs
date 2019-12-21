@@ -60,4 +60,14 @@ impl Client {
 
         Ok(output.item.map(Photograph::from_document))
     }
+
+    pub fn add_photograph(&self, photograph: Photograph) -> Result<Photograph, RusotoError<rusoto_dynamodb::PutItemError>> {
+        let mut input = rusoto_dynamodb::PutItemInput::default();
+        input.table_name = self.config.photograph_table.clone();
+        input.item = photograph.to_document();
+
+        self.dynamo.put_item(input).sync()?;
+
+        Ok(photograph)
+    }
 }

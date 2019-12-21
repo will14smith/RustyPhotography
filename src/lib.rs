@@ -7,8 +7,9 @@ pub mod data;
 
 mod models;
 
-mod list_photographs;
+mod create_photograph;
 mod get_photograph;
+mod list_photographs;
 
 use serde::Serialize;
 use rocket::response::status;
@@ -38,6 +39,7 @@ pub fn create_rocket(client: Client) -> rocket::Rocket {
         .manage(client)
         .mount("/", routes![
             index, echo,
+            create_photograph::create_photograph,
             get_photograph::get_photograph,
             list_photographs::list_photographs,
         ])

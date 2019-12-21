@@ -10,6 +10,13 @@ pub struct Image {
 }
 
 impl Image {
+    pub fn new(object_key: String, image_type: ImageType) -> Image {
+        Image {
+            object_key,
+            image_type,
+        }
+    }
+
     pub fn object_key(&self) -> &String { &self.object_key }
     pub fn image_type(&self) -> ImageType { self.image_type }
 }
