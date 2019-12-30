@@ -1,0 +1,13 @@
+{{#*inline "title"}}Home{{/inline}}
+{{#*inline "page"}}
+    <div class="row align-items-center">
+        {{#each photographs}}
+            <div class="col-md-{{this.column_width}}">
+                <div class="card mb-4 box-shadow">
+                    <img class="card-img-top gallery-img" src="{{this.thumbnail_url}}" alt="{{this.photograph.title}}" title="{{this.photograph.title}}">
+                </div>
+            </div>
+        {{/each}}
+    </div>
+{{/inline}}
+{{~> _layout }}

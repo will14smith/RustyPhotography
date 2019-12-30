@@ -4,6 +4,7 @@
 
 pub mod config;
 pub mod data;
+pub mod site_gen;
 
 mod models;
 

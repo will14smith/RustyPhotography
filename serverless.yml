@@ -22,13 +22,22 @@ provider:
             - Ref: 'AWS::AccountId'
             - "table/photography-prod-photograph"
 
+  environment:
+    IMAGE_BUCKET: photography-dev-image
+    PHOTOGRAPH_TABLE: photography-dev-photograph
+    SITE_BUCKET: photography-dev-site
+    SSM_SiteGenerator_AccessKey: photography-dev-SiteGeneratorSigningUser-AccessKey
+    SSM_SiteGenerator_SecretKey: photography-dev-SiteGeneratorSigningUser-SecretKey
+
 package:
   individually: true
 
-functions:
-  hello:
-    handler: photography.hello
+layers:
+  static:
+    name: ${self:service}-${self:provider.stage}-static
+    path: static
 
+functions:
   web:
     handler: photography.web
     events:
@@ -38,3 +47,8 @@ functions:
       - http:
           path: "{proxy+}"
           method: any
+
+  site-gen:
+    handler: photography.site_gen
+    layers:
+      - Ref: StaticLambdaLayer
