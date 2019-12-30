@@ -3,6 +3,7 @@ use rusoto_dynamodb::DynamoDbClient;
 use rusoto_core::credential::ProfileProvider;
 use rusoto_core::{HttpClient, Region};
 use photography::data;
+use std::sync::Arc;
 
 fn main() {
     let mut creds = ProfileProvider::new().unwrap();
@@ -18,7 +19,7 @@ fn main() {
         photograph_table: String::from("photography-dev-photograph"),
     };
 
-    let client = data::Client::new(dynamo, client_config);
+    let client = Arc::new(data::Client::new(dynamo, client_config));
 
     let r = create_rocket(client);
 

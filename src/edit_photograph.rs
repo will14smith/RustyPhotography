@@ -4,6 +4,7 @@ use rocket_contrib::json::Json;
 use rocket::{ State, http::Status };
 use crate::data::{Client, Photograph};
 use crate::models::PhotographDto;
+use std::sync::Arc;
 
 #[derive(Deserialize)]
 #[serde(rename_all = "PascalCase")]
@@ -32,7 +33,7 @@ impl EditPhotographDto {
 }
 
 #[put("/photograph/<id>", format = "json", data = "<input>")]
-pub fn edit_photograph(client: State<Client>, id: String, input: Json<EditPhotographDto>) -> Result<Json<PhotographDto>, Status> {
+pub fn edit_photograph(client: State<Arc<Client>>, id: String, input: Json<EditPhotographDto>) -> Result<Json<PhotographDto>, Status> {
     let id = uuid::Uuid::parse_str(&id).map_err(|_| Status::BadRequest)?;
 
     let updates = input.into_inner().get_update_values();

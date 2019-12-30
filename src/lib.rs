@@ -14,34 +14,19 @@ mod list_photographs;
 
 mod edit_layout;
 
-use serde::Serialize;
-use rocket::response::status;
-use rocket_contrib::json::Json;
-
 use crate::data::Client;
+use std::sync::Arc;
 
 #[get("/")]
 fn index() -> &'static str {
-    "Hello, world!"
+    "This is an API! you probably don't want this page..."
 }
 
-#[derive(Serialize)]
-struct EchoResponse {
-    text: String,
-}
-
-#[get("/echo/<text>")]
-fn echo(text: &rocket::http::RawStr) -> Result<Json<EchoResponse>, status::BadRequest<String>> {
-    let decoded_text = text.url_decode().map_err(|e| status::BadRequest(Some(e.to_string())))?;
-
-    Ok(Json(EchoResponse{ text: decoded_text }))
-}
-
-pub fn create_rocket(client: Client) -> rocket::Rocket {
+pub fn create_rocket(client: Arc<Client>) -> rocket::Rocket {
     rocket::ignite()
         .manage(client)
         .mount("/", routes![
-            index, echo,
+            index,
             create_photograph::create_photograph,
             edit_photograph::edit_photograph,
             get_photograph::get_photograph,

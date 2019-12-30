@@ -3,6 +3,7 @@ use serde::Deserialize;
 use rocket::{ State, http::Status };
 use rocket_contrib::json::Json;
 use crate::data::{Client, Layout};
+use std::sync::Arc;
 
 #[derive(Deserialize,Debug)]
 #[serde(rename_all = "PascalCase")]
@@ -24,7 +25,7 @@ impl Into<Layout> for &EditLayoutDto {
 }
 
 #[put("/layout", format = "json", data = "<input>")]
-pub fn edit_layout(client: State<Client>, input: Json<EditLayoutsDto>) -> Result<Status, Status> {
+pub fn edit_layout(client: State<Arc<Client>>, input: Json<EditLayoutsDto>) -> Result<Status, Status> {
     let model = input.into_inner().0.iter()
         .map(|(&k, v)| (k, v.into()))
         .collect();

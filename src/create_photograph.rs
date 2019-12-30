@@ -3,6 +3,7 @@ use rocket_contrib::json::Json;
 use rocket::{ State, http::Status };
 use crate::data::{Client, Photograph, Image, ImageType};
 use crate::models::PhotographDto;
+use std::sync::Arc;
 
 #[derive(Deserialize)]
 #[serde(rename_all = "PascalCase")]
@@ -28,7 +29,7 @@ impl Into<Photograph> for CreatePhotographDto {
 }
 
 #[post("/photograph", format = "json", data = "<input>")]
-pub fn create_photograph(client: State<Client>, input: Json<CreatePhotographDto>) -> Result<Json<PhotographDto>, Status> {
+pub fn create_photograph(client: State<Arc<Client>>, input: Json<CreatePhotographDto>) -> Result<Json<PhotographDto>, Status> {
     let photograph = input.into_inner().into();
 
     let photograph = client.add_photograph(photograph).map_err(|e| {

@@ -1,19 +1,22 @@
 use rocket_lamb::RocketExt;
 use photography::{ create_rocket, config, data };
-use rusoto_core::Region;
-use rusoto_dynamodb::DynamoDbClient;
+use std::sync::Arc;
 
 fn main() {
     let config = config::Config::from_env().expect("failed to get config");
 
-    let dynamo = DynamoDbClient::new(Region::default());
+    let client = get_data_client(&config);
+
+    create_rocket(Arc::new(client))
+        .lambda()
+        .launch();
+}
+
+fn get_data_client(config: &config::Config) -> data::Client {
+    let dynamo = rusoto_dynamodb::DynamoDbClient::new(config.region());
     let client_config = data::Config {
         photograph_table: config.photograph_table().clone()
     };
 
-    let client = data::Client::new(dynamo, client_config);
-
-    create_rocket(client)
-        .lambda()
-        .launch();
+    data::Client::new(dynamo, client_config)
 }
