@@ -2,6 +2,19 @@ service: rusty-photography
 
 plugins:
   - serverless-rust
+  - serverless-terraform-outputs
+
+custom:
+  tfStage: ${self:provider.stage}
+
+  lambdaRoleArn: ${terraform:${self:custom.tfStage}:lambda-role-arn.value}
+
+  imageBucketId: ${terraform:${self:custom.tfStage}:image-bucket-id.value}
+  siteBucketId: ${terraform:${self:custom.tfStage}:site-bucket-id.value}
+  photographTableId: ${terraform:${self:custom.tfStage}:photograph-table-id.value}
+
+  siteGeneratorAccessKeyParameter: ${terraform:${self:custom.tfStage}:site-generator-accesskey-parameter.value}
+  siteGeneratorSecretKeyParameter: ${terraform:${self:custom.tfStage}:site-generator-secretkey-parameter.value}
 
 provider:
   name: aws
@@ -9,25 +22,15 @@ provider:
   region: eu-west-2
   runtime: rust
 
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - "dynamodb:GetItem"
-        - "dynamodb:Scan"
-      Resource:
-        Fn::Join:
-          - ':'
-          - - "arn:aws:dynamodb"
-            - Ref: 'AWS::Region'
-            - Ref: 'AWS::AccountId'
-            - "table/photography-prod-photograph"
-
   environment:
-    IMAGE_BUCKET: photography-dev-image
-    PHOTOGRAPH_TABLE: photography-dev-photograph
-    SITE_BUCKET: photography-dev-site
-    SSM_SiteGenerator_AccessKey: photography-dev-SiteGeneratorSigningUser-AccessKey
-    SSM_SiteGenerator_SecretKey: photography-dev-SiteGeneratorSigningUser-SecretKey
+    PHOTOGRAPH_TABLE: ${self:custom.photographTableId}
+    IMAGE_BUCKET: ${self:custom.imageBucketId}
+    SITE_BUCKET: ${self:custom.siteBucketId}
+
+    SSM_SiteGenerator_AccessKey: ${self:custom.siteGeneratorAccessKeyParameter}
+    SSM_SiteGenerator_SecretKey: ${self:custom.siteGeneratorSecretKeyParameter}
+
+  role: ${self:custom.lambdaRoleArn}
 
 package:
   individually: true
@@ -44,11 +47,23 @@ functions:
       - http:
           path: /
           method: any
+          cors: true
       - http:
           path: "{proxy+}"
           method: any
+          cors: true
 
   site-gen:
     handler: photography.site_gen
+    events:
+      - http:
+          path: /generate
+          method: post
+          cors: true
+          integration: lambda
+          response:
+            statusCodes:
+              204:
+                pattern: ""
     layers:
       - Ref: StaticLambdaLayer

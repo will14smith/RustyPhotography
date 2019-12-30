@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "serverless-rust": "^0.3.7"
+    "serverless-rust": "^0.3.7",
+    "serverless-terraform-outputs": "^0.0.4"
   }
 }

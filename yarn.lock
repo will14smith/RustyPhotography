@@ -2564,6 +2564,11 @@ serverless-rust@^0.3.7:
     fs-extra "^8.1.0"
     serverless "^1.57.0"
 
+serverless-terraform-outputs@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/serverless-terraform-outputs/-/serverless-terraform-outputs-0.0.4.tgz#5a5f20563c2b291347846336cdfedf16b1dd76e2"
+  integrity sha512-+0W+n9jdlw06AJgCxBKBdk3fBVXGj4a4cskDnenM9ZBn/0oBw54x4efk54BFtSPrJ6CCNzVomUAlacSZ7NSAxQ==
+
 serverless@^1.57.0:
   version "1.60.0"
   resolved "https://registry.yarnpkg.com/serverless/-/serverless-1.60.0.tgz#ff048f9cfd596f50577b2e56ff0095dc974ed6bb"
