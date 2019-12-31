@@ -21,3 +21,4 @@ rusoto_ssm = "0.42"
 rusoto_sns = "0.42"
 chrono = { version = "0.4", features = ["serde"] }
 handlebars = "2.0.2"
+image = "0.22"

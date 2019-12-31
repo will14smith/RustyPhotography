@@ -1,12 +1,14 @@
-use serde::{Serialize, Deserialize};
+use std::collections::HashMap;
 use std::sync::Arc;
+use serde::{Serialize, Deserialize};
 use crate::data;
 
 mod s3_storage;
 pub use s3_storage::S3ImageStorage;
 mod sns_notifier;
 pub use sns_notifier::SnsNotifier;
-use std::collections::HashMap;
+
+mod thumbnail;
 
 #[derive(Serialize, Deserialize)]
 pub struct Event {
@@ -43,7 +45,9 @@ pub struct Processor {
 
 impl Processor {
     pub fn new(storage: Arc<dyn ImageStorage>, data: Arc<data::Client>) -> Processor {
-        let default_processors = vec!();
+        let default_processors: Vec<Box<dyn ImageProcessor>> = vec!(
+            Box::new(thumbnail::Thumbnail::new(None, Some(250))),
+        );
 
         Self::new_with_processors(storage, data, default_processors)
     }

@@ -2,7 +2,7 @@ mod image;
 mod layout;
 mod photograph;
 
-pub use image::{Image, ImageType};
+pub use self::image::{Image, ImageType};
 pub use layout::Layout;
 pub use photograph::Photograph;
 
