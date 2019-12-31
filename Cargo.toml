@@ -1,24 +1,11 @@
-[package]
-name = "photography"
-version = "0.1.0"
-authors = ["Will Smith <will@toxon.co.uk>"]
-edition = "2018"
+[workspace]
 
-[dependencies]
-lambda_runtime = "0.2"
-aws_lambda_events = "0.2"
-serde = { version = "1.0", features = ["derive"] }
-serde_dynamodb = "0.4"
-serde_json = "1.0"
-rocket = "0.4"
-rocket_contrib = { version = "0.4", default-features = false, features = ["json"] }
-rocket_lamb = "0.6"
-uuid = { version = "0.8", features = ["serde", "v4"] }
-rusoto_core = "0.42"
-rusoto_dynamodb = "0.42"
-rusoto_s3 = "0.42"
-rusoto_ssm = "0.42"
-rusoto_sns = "0.42"
-chrono = { version = "0.4", features = ["serde"] }
-handlebars = "2.0.2"
-image = "0.22"
+members = [
+    "photography-api",
+    "photography-data",
+    "photography-processing",
+    "photography-site-gen",
+
+    "photography-lambda",
+    "photography-local",
+]

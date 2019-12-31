@@ -3,12 +3,39 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../photography/examples" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../photography/tests" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/../photography/benches" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/examples" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-data/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-data/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-data/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-data/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-site-gen/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-site-gen/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-site-gen/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-site-gen/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-processing/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-processing/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-processing/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-processing/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-api/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-api/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-api/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-api/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-local/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-local/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-local/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-local/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-lambda/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-lambda/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-lambda/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/photography-lambda/benches" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/photography-api/target" />
+      <excludeFolder url="file://$MODULE_DIR$/photography-data/target" />
+      <excludeFolder url="file://$MODULE_DIR$/photography-lambda/target" />
+      <excludeFolder url="file://$MODULE_DIR$/photography-local/target" />
+      <excludeFolder url="file://$MODULE_DIR$/photography-processing/target" />
+      <excludeFolder url="file://$MODULE_DIR$/photography-site-gen/target" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

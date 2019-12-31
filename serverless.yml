@@ -47,7 +47,7 @@ layers:
 
 functions:
   web:
-    handler: photography.web
+    handler: photography-lambda.web
     events:
       - http:
           path: /
@@ -59,7 +59,7 @@ functions:
           cors: true
 
   site-gen:
-    handler: photography.site_gen
+    handler: photography-lambda.site_gen
     events:
       - http:
           path: /generate
@@ -74,7 +74,7 @@ functions:
       - Ref: StaticLambdaLayer
 
   image-processor:
-    handler: photography.image_processor
+    handler: photography-lambda.image_processor
     events:
       - sns:
           arn: ${self:custom.imageProcessorTopicArn}

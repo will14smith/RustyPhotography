@@ -1,0 +1,15 @@
+[package]
+name = "photography-local"
+version = "0.1.0"
+authors = ["Will Smith <will@toxon.co.uk>"]
+edition = "2018"
+
+[dependencies]
+photography-api = { path = "../photography-api" }
+photography-data = { path = "../photography-data" }
+photography-processing = { path = "../photography-processing" }
+photography-site-gen = { path = "../photography-site-gen" }
+rusoto_core = "0.42"
+rusoto_dynamodb = "0.42"
+rusoto_sns = "0.42"
+rusoto_ssm = "0.42"
