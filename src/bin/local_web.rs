@@ -2,7 +2,7 @@ use photography::create_rocket;
 use rusoto_dynamodb::DynamoDbClient;
 use rusoto_core::credential::ProfileProvider;
 use rusoto_core::{HttpClient, Region};
-use photography::data;
+use photography::{ data, image_processing };
 use std::sync::Arc;
 
 fn main() {
@@ -11,7 +11,7 @@ fn main() {
 
     let dynamo = DynamoDbClient::new_with(
         HttpClient::new().unwrap(),
-        creds,
+        creds.clone(),
         Region::EuWest2
     );
 
@@ -21,7 +21,17 @@ fn main() {
 
     let client = Arc::new(data::Client::new(dynamo, client_config));
 
-    let r = create_rocket(client);
+    let sns = rusoto_sns::SnsClient::new_with(
+        HttpClient::new().unwrap(),
+        creds.clone(),
+        Region::EuWest2
+    );
+    let notifier = Arc::new(image_processing::SnsNotifier::new(
+        String::from("arn:aws:sns:eu-west-2:682179218046:photography-dev-imageprocessor"),
+        Arc::new(sns)
+    ));
+
+    let r = create_rocket(client, notifier);
 
     r.launch();
 }

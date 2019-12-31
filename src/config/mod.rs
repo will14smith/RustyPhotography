@@ -7,6 +7,8 @@ pub struct Config {
     image_bucket: String,
     site_bucket: String,
 
+    image_processor_topic: String,
+
     site_gen_param_access_key: String,
     site_gen_param_secret_key: String,
 }
@@ -19,6 +21,8 @@ impl Config {
             photograph_table: env::var("PHOTOGRAPH_TABLE")?,
             image_bucket: env::var("IMAGE_BUCKET")?,
             site_bucket: env::var("SITE_BUCKET")?,
+
+            image_processor_topic: env::var("IMAGE_PROCESSOR_TOPIC_ARN")?,
 
             site_gen_param_access_key: env::var("SSM_SiteGenerator_AccessKey")?,
             site_gen_param_secret_key: env::var("SSM_SiteGenerator_SecretKey")?,
@@ -37,6 +41,10 @@ impl Config {
     }
     pub fn site_bucket(&self) -> &String {
         &self.site_bucket
+    }
+
+    pub fn image_processor_topic(&self) -> &String {
+        &self.image_processor_topic
     }
 
     pub fn site_gen_param_access_key(&self) -> &String {

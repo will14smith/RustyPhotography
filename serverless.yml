@@ -13,6 +13,9 @@ custom:
   siteBucketId: ${terraform:${self:custom.tfStage}:site-bucket-id.value}
   photographTableId: ${terraform:${self:custom.tfStage}:photograph-table-id.value}
 
+  imageProcessorTopicArn: ${terraform:${self:custom.tfStage}:image-processor-topic-arn.value}
+  imageProcessorTopicName: ${terraform:${self:custom.tfStage}:image-processor-topic-name.value}
+
   siteGeneratorAccessKeyParameter: ${terraform:${self:custom.tfStage}:site-generator-accesskey-parameter.value}
   siteGeneratorSecretKeyParameter: ${terraform:${self:custom.tfStage}:site-generator-secretkey-parameter.value}
 
@@ -26,6 +29,8 @@ provider:
     PHOTOGRAPH_TABLE: ${self:custom.photographTableId}
     IMAGE_BUCKET: ${self:custom.imageBucketId}
     SITE_BUCKET: ${self:custom.siteBucketId}
+
+    IMAGE_PROCESSOR_TOPIC_ARN: ${self:custom.imageProcessorTopicArn}
 
     SSM_SiteGenerator_AccessKey: ${self:custom.siteGeneratorAccessKeyParameter}
     SSM_SiteGenerator_SecretKey: ${self:custom.siteGeneratorSecretKeyParameter}
@@ -67,3 +72,10 @@ functions:
                 pattern: ""
     layers:
       - Ref: StaticLambdaLayer
+
+  image-processor:
+    handler: photography.image_processor
+    events:
+      - sns:
+          arn: ${self:custom.imageProcessorTopicArn}
+          topicName: ${self:custom.imageProcessorTopicName}

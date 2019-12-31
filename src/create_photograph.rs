@@ -1,7 +1,8 @@
 use serde::Deserialize;
 use rocket_contrib::json::Json;
 use rocket::{ State, http::Status };
-use crate::data::{Client, Photograph, Image, ImageType};
+use crate::{ data, image_processing };
+use crate::data::{Photograph, Image, ImageType};
 use crate::models::PhotographDto;
 use std::sync::Arc;
 
@@ -29,11 +30,20 @@ impl Into<Photograph> for CreatePhotographDto {
 }
 
 #[post("/photograph", format = "json", data = "<input>")]
-pub fn create_photograph(client: State<Arc<Client>>, input: Json<CreatePhotographDto>) -> Result<Json<PhotographDto>, Status> {
+pub fn create_photograph(client: State<Arc<data::Client>>, notifier: State<Arc<dyn image_processing::Notifier>>, input: Json<CreatePhotographDto>) -> Result<Json<PhotographDto>, Status> {
     let photograph = input.into_inner().into();
 
     let photograph = client.add_photograph(photograph).map_err(|e| {
         eprintln!("Failed to add photograph: {:?}", e);
+
+        Status::InternalServerError
+    })?;
+
+    notifier.notify(image_processing::Event {
+        photograph_id: photograph.id(),
+        source: photograph.images().get(0).unwrap().object_key().clone(),
+    }).map_err(|e| {
+        eprintln!("Failed to send processing notification: {:?}", e);
 
         Status::InternalServerError
     })?;

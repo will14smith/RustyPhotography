@@ -5,6 +5,7 @@
 pub mod config;
 pub mod data;
 pub mod site_gen;
+pub mod image_processing;
 
 mod models;
 
@@ -15,7 +16,6 @@ mod list_photographs;
 
 mod edit_layout;
 
-use crate::data::Client;
 use std::sync::Arc;
 
 #[get("/")]
@@ -23,9 +23,9 @@ fn index() -> &'static str {
     "This is an API! you probably don't want this page..."
 }
 
-pub fn create_rocket(client: Arc<Client>) -> rocket::Rocket {
+pub fn create_rocket(client: Arc<data::Client>, notifier: Arc<dyn image_processing::Notifier>) -> rocket::Rocket {
     rocket::ignite()
-        .manage(client)
+        .manage(client).manage(notifier)
         .mount("/", routes![
             index,
             create_photograph::create_photograph,
