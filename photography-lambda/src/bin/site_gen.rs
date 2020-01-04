@@ -21,6 +21,7 @@ fn handler(_: Event, _: Context) -> Result<Output, HandlerError> {
     let site_storer = photography_lambda::get_site_storer(&config);
 
     photography_site_gen::generate(image_provider, site_storer, "/opt").map_err(|e| {
+        eprintln!("{}", e);
         HandlerError::from(e.as_str())
     })?;
 

@@ -23,6 +23,7 @@ fn handler(event: sns::SnsEvent, _: Context) -> Result<Output, HandlerError> {
 
     for record in event.records {
         process_record(&processor, &record.sns).map_err(|e| {
+            eprintln!("{}", e);
             HandlerError::from(e.as_str())
         })?;
     }
