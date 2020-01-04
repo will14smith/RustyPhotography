@@ -27,10 +27,10 @@ impl Processor {
     pub fn process(&self, event: Event) -> Result<(), String> {
         let source = ImageData {
             photograph_id: event.photograph_id,
-            image_type: photography_data::ImageType::Full, // ?
+            image_type: event.image.image_type,
 
-            source: event.source.clone(),
-            data: self.storage.get(event.source)?,
+            source: event.image.object_key.clone(),
+            data: self.storage.get(event.image.object_key)?,
         };
 
         let mut new_images = Vec::new();

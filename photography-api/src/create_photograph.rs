@@ -39,9 +39,14 @@ pub fn create_photograph(client: State<Arc<photography_data::Client>>, notifier:
         Status::InternalServerError
     })?;
 
+    let image = photograph.images().get(0).unwrap();
+
     notifier.notify(photography_processing::Event {
         photograph_id: photograph.id(),
-        source: photograph.images().get(0).unwrap().object_key().clone(),
+        image: photography_processing::EventImage {
+            object_key: image.object_key().clone(),
+            image_type: image.image_type(),
+        },
     }).map_err(|e| {
         eprintln!("Failed to send processing notification: {:?}", e);
 

@@ -1,5 +1,5 @@
 use std::{
-    collections::HashMap
+    collections::HashMap,
     fs::{ self, File },
     io::Write,
     path::Path,
