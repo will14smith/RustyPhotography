@@ -60,3 +60,5 @@ output "cognito-user-pool-arn" { value = module.app.cognito-user-pool-arn }
 output "cognito-user-pool-web-client-id" { value = module.app.cognito-user-pool-web-client-id }
 output "cognito-identity-pool-id" { value = module.app.cognito-identity-pool-id }
 output "lambda-role-arn" { value = module.app.lambda-role-arn }
+output "api-gateway-rest-api-id" { value = module.app.api-gateway-rest-api-id }
+output "api-gateway-rest-api-root-resource-id" { value = module.app.api-gateway-rest-api-root-resource-id }
